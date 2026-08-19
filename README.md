@@ -90,6 +90,36 @@ jobs:
 The caller repo needs a `DEPENDENCYTRACK_API_KEY` repo secret with
 `BOM_UPLOAD` permission in Dependency-Track.
 
+### pr-agent.yml
+
+Runs [The-PR-Agent/pr-agent](https://github.com/The-PR-Agent/pr-agent)
+(auto review, auto describe, auto improve) on pull requests, using an
+OpenRouter model rather than a direct OpenAI/Anthropic key. Only rolled out
+to actively developed repos, not every repo in the account.
+
+Usage:
+
+```yaml
+name: PR Agent
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+  issue_comment:
+
+jobs:
+  pr_agent:
+    uses: DoubtfulTurnip/.github/.github/workflows/pr-agent.yml@main
+    secrets:
+      openrouter-key: ${{ secrets.OPENROUTER_API_KEY }}
+```
+
+The caller repo needs an `OPENROUTER_API_KEY` repo secret (personal GitHub
+accounts don't support org-wide secrets, so this has to be set per repo).
+Default model is `openrouter/anthropic/claude-3.5-sonnet` with
+`openrouter/qwen/qwen3-coder:free` as a fallback; override via the `model`
+and `fallback_model` inputs if needed.
+
 ## New repo checklist
 
 1. Create the repo, add a `Dockerfile` if it builds a container.

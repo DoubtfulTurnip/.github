@@ -1,0 +1,38 @@
+name: PR Agent (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      model:
+        description: "OpenRouter model identifier, e.g. openrouter/anthropic/claude-3.5-sonnet"
+        required: false
+        type: string
+        default: "openrouter/anthropic/claude-3.5-sonnet"
+      fallback_model:
+        description: "OpenRouter fallback model identifier"
+        required: false
+        type: string
+        default: "openrouter/qwen/qwen3-coder:free"
+    secrets:
+      openrouter-key:
+        required: true
+
+jobs:
+  pr_agent:
+    if: ${{ github.event.sender.type != 'Bot' }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: write
+    steps:
+      - name: PR Agent action step
+        uses: The-PR-Agent/pr-agent@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENROUTER.KEY: ${{ secrets.openrouter-key }}
+          config.model: ${{ inputs.model }}
+          config.fallback_models: '["${{ inputs.fallback_model }}"]'
+          github_action_config.auto_review: "true"
+          github_action_config.auto_describe: "true"
+          github_action_config.auto_improve: "true"
