@@ -110,9 +110,19 @@ on:
 jobs:
   pr_agent:
     uses: DoubtfulTurnip/.github/.github/workflows/pr-agent.yml@main
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: write
     secrets:
       openrouter-key: ${{ secrets.OPENROUTER_API_KEY }}
 ```
+
+The `permissions:` block on the caller job is required — a reusable
+workflow's job can only ever be granted permissions the caller explicitly
+passes down, so omitting it fails with "is only allowed 'contents: read,
+issues: none, pull-requests: none'" even though the reusable workflow itself
+requests write access.
 
 The caller repo needs an `OPENROUTER_API_KEY` repo secret (personal GitHub
 accounts don't support org-wide secrets, so this has to be set per repo).
