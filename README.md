@@ -116,9 +116,9 @@ jobs:
 
 The caller repo needs an `OPENROUTER_API_KEY` repo secret (personal GitHub
 accounts don't support org-wide secrets, so this has to be set per repo).
-Default model is `openrouter/anthropic/claude-3.5-sonnet` with
-`openrouter/qwen/qwen3-coder:free` as a fallback; override via the `model`
-and `fallback_model` inputs if needed.
+Default model is `openrouter/deepseek/deepseek-v4-pro-0813` with
+`openrouter/deepseek/deepseek-v4-flash-0731` as a fallback; override via the
+`model` and `fallback_model` inputs if needed.
 
 ## New repo checklist
 

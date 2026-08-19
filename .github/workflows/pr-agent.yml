@@ -4,15 +4,15 @@ on:
   workflow_call:
     inputs:
       model:
-        description: "OpenRouter model identifier, e.g. openrouter/anthropic/claude-3.5-sonnet"
+        description: "OpenRouter model identifier, e.g. openrouter/deepseek/deepseek-v4-pro-0813"
         required: false
         type: string
-        default: "openrouter/anthropic/claude-3.5-sonnet"
+        default: "openrouter/deepseek/deepseek-v4-pro-0813"
       fallback_model:
         description: "OpenRouter fallback model identifier"
         required: false
         type: string
-        default: "openrouter/qwen/qwen3-coder:free"
+        default: "openrouter/deepseek/deepseek-v4-flash-0731"
     secrets:
       openrouter-key:
         required: true
