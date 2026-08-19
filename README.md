@@ -130,6 +130,35 @@ Default model is `openrouter/deepseek/deepseek-v4-pro-0813` with
 `openrouter/deepseek/deepseek-v4-flash-0731` as a fallback; override via the
 `model` and `fallback_model` inputs if needed.
 
+### dependabot-auto-merge.yml
+
+Auto-merges Dependabot PRs that are patch or minor version bumps once their
+checks pass; major bumps are left for manual review, same as anything that
+fails CI. Uses `dependabot/fetch-metadata` to classify the update, then
+`gh pr merge --auto --squash`.
+
+Usage:
+
+```yaml
+name: Dependabot auto-merge
+
+on: pull_request
+
+jobs:
+  auto-merge:
+    if: github.actor == 'dependabot[bot]'
+    uses: DoubtfulTurnip/.github/.github/workflows/dependabot-auto-merge.yml@main
+    permissions:
+      contents: write
+      pull-requests: write
+```
+
+Requires "Allow auto-merge" to be enabled in the repo's General settings
+(`gh api repos/<owner>/<repo> -X PATCH -f allow_auto_merge=true`). This only
+queues the merge — it still won't merge until required status checks pass,
+so a broken update (like the SherlockWebUI-Kasm pandas/sherlock-project
+conflict) just sits there rather than merging broken.
+
 ## New repo checklist
 
 1. Create the repo, add a `Dockerfile` if it builds a container.
