@@ -154,10 +154,19 @@ jobs:
 ```
 
 Requires "Allow auto-merge" to be enabled in the repo's General settings
-(`gh api repos/<owner>/<repo> -X PATCH -f allow_auto_merge=true`). This only
+(`gh api repos/<owner>/<repo> -X PATCH -F allow_auto_merge=true` — note
+`-F`, not `-f`, so the value is sent as a real JSON boolean). This only
 queues the merge — it still won't merge until required status checks pass,
 so a broken update (like the SherlockWebUI-Kasm pandas/sherlock-project
 conflict) just sits there rather than merging broken.
+
+**Private repos on a free personal GitHub plan can't enable this setting at
+all** (`allow_auto_merge` silently stays `false` no matter how you set it —
+this needs GitHub Pro/Team/Enterprise). The workflow still works on private
+repos in the common case where CI finishes before the workflow runs: `gh pr
+merge --auto` merges immediately if the PR is already mergeable, without
+needing the queuing feature. It just can't *wait* for a still-running check
+on a private repo the way it can on a public one.
 
 ## New repo checklist
 
