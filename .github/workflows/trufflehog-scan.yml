@@ -1,0 +1,24 @@
+name: TruffleHog secret scan (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      extra-args:
+        description: "Extra args passed to the trufflehog action"
+        required: false
+        type: string
+        default: "--only-verified"
+
+jobs:
+  trufflehog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: TruffleHog OSS
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: ${{ inputs.extra-args }}

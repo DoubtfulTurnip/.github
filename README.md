@@ -168,6 +168,36 @@ merge --auto` merges immediately if the PR is already mergeable, without
 needing the queuing feature. It just can't *wait* for a still-running check
 on a private repo the way it can on a public one.
 
+### trufflehog-scan.yml
+
+Scans the full git history (not just the diff) with
+[TruffleHog OSS](https://github.com/trufflesecurity/trufflehog) on every
+push and pull request, and fails the run if it finds a **verified** (live,
+checked-against-the-provider) secret. `--only-verified` is deliberate — it
+keeps the signal high and avoids failing builds on high-entropy strings that
+aren't actually live credentials. Note: even if a later commit removes the
+secret, it's still reachable in git history and this will keep failing until
+the credential itself is rotated/revoked, not just deleted from the file.
+
+Usage:
+
+```yaml
+name: Secret scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  trufflehog:
+    uses: DoubtfulTurnip/.github/.github/workflows/trufflehog-scan.yml@main
+    permissions:
+      contents: read
+```
+
+No secrets or repo settings required — this one just works out of the box.
+
 ## New repo checklist
 
 1. Create the repo, add a `Dockerfile` if it builds a container.
